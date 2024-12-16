@@ -138,83 +138,20 @@
     </div>
   </div>
 
-  <!-- Create Modal -->
-  <div
-    class="modal fade"
-    id="createModal"
-    style="z-index: 10000 !important"
-    tabindex="-1"
-    aria-labelledby="createModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="createModalLabel">Create FAQ</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <form @submit.prevent="handleCreateSubmit">
-            <div class="mb-3">
-              <label class="form-label">Category:</label>
-              <input
-                v-model="newFaq.category"
-                type="text"
-                class="form-control"
-                :class="{ 'is-invalid': createFormErrors.category }"
-              />
-              <div class="invalid-feedback">
-                {{ createFormErrors.category }}
-              </div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Question:</label>
-              <input
-                v-model="newFaq.question"
-                type="text"
-                class="form-control"
-                :class="{ 'is-invalid': createFormErrors.question }"
-              />
-              <div class="invalid-feedback">
-                {{ createFormErrors.question }}
-              </div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Answer:</label>
-              <input
-                v-model="newFaq.answer"
-                type="text"
-                class="form-control"
-                :class="{ 'is-invalid': createFormErrors.answer }"
-              />
-              <div class="invalid-feedback">{{ createFormErrors.answer }}</div>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">Save</button>
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+  <CreateModal
+    modalId="createModal"
+    title="Create New Location"
+    :fields="createModalFields"
+    :errors="createFormErrors"
+    @submit="handleCreateSubmit"
+  />
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import DataTable from "datatables.net-vue3";
 import DataTableBs5 from "datatables.net-bs5";
+import CreateModal from "@/components/CreateModal.vue";
 
 // import "bootstrap/dist/css/bootstrap.min.css";
 import bootstrap from "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -232,6 +169,12 @@ const createFormErrors = ref({
   question: "",
   answer: "",
 });
+
+const createModalFields = ref([
+  { label: "Category", key: "category", type: "text" },
+  { label: "Question", key: "question", type: "text" },
+  { label: "Answer", key: "answer", type: "text" },
+]);
 
 const columns = [
   { data: "category", title: "Category" },
@@ -297,7 +240,6 @@ const loadData = async (callback) => {
     const response = await fetch("/faqs");
     const faqsData = await response.json();
     faqs.value = faqsData;
-    console.log('response: '+  faqs.value);
   } catch (error) {
     console.error("Error fetching FAQs:", error);
   }
@@ -348,20 +290,17 @@ const handleDeleteConfirm = async () => {
   }
 };
 
-const handleCreateSubmit = async () => {
+const handleCreateSubmit = async (formData) => {
   try {
     const response = await fetch(`/faqs`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newFaq.value),
+      body: JSON.stringify(formData),
     });
 
     if (response.ok) {
-      faqs.value.push({
-        category: newFaq.value.category,
-        question: newFaq.value.question,
-        answer: newFaq.value.answer,
-      });
+      const createdFaq = await response.json();
+      faqs.value.push(createdFaq.data);
 
       createFormErrors.value = { category: "", question: "", answer: "" };
 
@@ -376,9 +315,9 @@ const handleCreateSubmit = async () => {
 
       if (errorData.detail && Array.isArray(errorData.detail)) {
         errorData.detail.forEach((error) => {
-          const field = error.loc[1]; // The field name (e.g., "category", "question")
+          const field = error.loc[1];
           if (createFormErrors.value[field] !== undefined) {
-            createFormErrors.value[field] = error.msg; // Set the error message for the field
+            createFormErrors.value[field] = error.msg;
           }
         });
       } else {
@@ -391,7 +330,6 @@ const handleCreateSubmit = async () => {
 };
 
 function clearNewFaq() {
-  console.log("Clearing new FAQ...");
   newFaq.value.category = "";
   newFaq.value.question = "";
   newFaq.value.answer = "";
