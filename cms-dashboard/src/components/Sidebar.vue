@@ -38,7 +38,14 @@
 </template>
 
 <script>
+import { userStore } from '@/stores/user';
+
 export default {
+  name: "Sidebar",
+  setup() {
+    const store = userStore();
+    return { store };
+  },
   methods: {
     goToHome() {
       // Redirect to home page
@@ -46,7 +53,7 @@ export default {
     },
     logout() {
       // Clear user data and redirect to login page
-      localStorage.removeItem('user');
+      this.store.logOut();
       this.$router.push('/login');
     },
   },

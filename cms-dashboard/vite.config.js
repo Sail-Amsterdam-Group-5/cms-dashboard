@@ -18,6 +18,12 @@ export default defineConfig({
         changeOrigin: true, // Ensures the host header matches the target
         secure: true, // If the API uses HTTPS
       },
+      '/locations': {
+      // Target for Users API
+      target: 'http://sail-map-api-route-oscar-dev.apps.inholland.hcs-lab.nl',
+      changeOrigin: true,
+      secure: true,
+    },
     },
   },
   resolve: {

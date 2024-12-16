@@ -5,4 +5,8 @@ $light: rgb(232, 232, 232);
   color: white !important;
 }
 
+td {
+  color: gray;
+}
+
 @import "../../node_modules/bootstrap/scss/bootstrap"

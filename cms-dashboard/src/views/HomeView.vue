@@ -33,5 +33,7 @@ export default {
     width: 100%;
     height: 30%;
     border-radius: 10px;
+    box-shadow: 5px 5px 10px rgb(0,0,0,0.2);
+    border: 1px solid rgb(187, 187, 187);
   }
 </style>

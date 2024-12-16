@@ -44,17 +44,19 @@ const router = createRouter({
   ],
 })
 
-// UNCOMMENT BEFORE DEPLOYING: Redirects the user to the login page if not already logged in.
+router.beforeEach((to, from, next) => {
+  const authStore = userStore();
 
-// router.beforeEach((to, from, next) => {
-//   const authStore = userStore();
+  authStore.autoLogin();
   
-//   if (!authStore.isLoggedIn && to.name !== 'login') {
-//     // Redirect to login if the user is not logged in
-//     next({ name: 'login' });
-//   } else {
-//     next();
-//   }
-// });
+  if (authStore.loggedIn == false && to.name !== 'login') {
+    // Redirect to login if the user is not logged in
+    console.log("You are not logged in = " + authStore.loggedIn);
+    next({ name: 'login' });
+  } else {
+    console.log("You are logged in and your username is: " + authStore.getUsername + "    the login status is: " + authStore.loggedIn);
+    next();
+  }
+});
 
 export default router

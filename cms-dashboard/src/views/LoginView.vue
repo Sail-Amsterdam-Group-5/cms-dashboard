@@ -107,6 +107,8 @@ export default {
           if (res === false) {
             alert("Invalid username or password");
           } else {
+            console.log("nice password bruh");
+            console.log(this.store.loggedIn);
             this.$router.replace("/");
           }
         })
