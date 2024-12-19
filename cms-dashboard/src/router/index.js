@@ -17,8 +17,8 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/faqs',
-      name: 'faqs',
+      path: '/faq',
+      name: 'faq',
       component: FaqView,
     },
     {

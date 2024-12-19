@@ -2,29 +2,41 @@
   <div
     style="
       background-color: white;
-      box-shadow: 5px 5px 10px rgb(0,0,0,0.2);
+      box-shadow: 5px 5px 10px rgb(0, 0, 0, 0.2);
       border: 1px solid rgb(187, 187, 187);
       border-radius: 1vh;
       width: 100%;
       margin: 1vw;
     "
   >
-    <div style="padding: 3vw; display: flex; flex-direction: column; gap: 20px">
-      <h1 style="margin-bottom: 0px !important">FAQs</h1>
+    <div style="padding: 2vw; display: flex; flex-direction: column; gap: 20px">
+      <p
+        style="
+          margin-bottom: 0px !important;
+          color: rgb(33, 37, 41);
+          font-size: 22px;
+        "
+      >
+        FAQs
+      </p>
       <button
-        class="btn btn-primary w-25"
+        class="btn btn-primary btn-sm w-100"
         data-bs-toggle="modal"
         data-bs-target="#createModal"
       >
         + Add new
       </button>
-      <div style="font-size: 14px">
+      <div
+        style="
+          font-size: 14px; /*border-style: solid; border-width: 1px; border-color: lightgray; padding: 1vw; border-radius: 1vh;*/
+        "
+      >
         <DataTable
           ref="table"
           :columns="columns"
           :options="options"
           :data="faqs"
-          class="table display table-striped"
+          class="table display table-striped table-bordered align-middle"
           width="100%"
         />
       </div>
@@ -42,7 +54,7 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="editModalLabel">Edit FAQ</h5>
+            <h6 class="modal-title" id="editModalLabel">Edit FAQ</h6>
             <button
               type="button"
               class="btn-close"
@@ -51,7 +63,7 @@
             ></button>
           </div>
           <div class="modal-body">
-            <form @submit.prevent="handleEditSubmit">
+            <form @submit.prevent="handleEditSubmit" id="editForm">
               <div class="mb-3">
                 <label class="form-label">Category:</label>
                 <input
@@ -70,24 +82,24 @@
               </div>
               <div class="mb-3">
                 <label class="form-label">Answer:</label>
-                <input
+                <textarea
                   v-model="selectedFaq.answer"
                   type="text"
                   class="form-control"
-                />
-              </div>
-              <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Cancel
-                </button>
+                ></textarea>
               </div>
             </form>
           </div>
+          <div class="modal-footer">
+              <button type="submit" class="btn-sm btn btn-primary" form="editForm">Save</button>
+              <button
+                type="button"
+                class="btn-sm btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+            </div>
         </div>
       </div>
     </div>
@@ -104,7 +116,7 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="deleteModalLabel">Delete FAQ</h5>
+            <h6 class="modal-title" id="deleteModalLabel">Delete FAQ</h6>
             <button
               type="button"
               class="btn-close"
@@ -113,21 +125,25 @@
             ></button>
           </div>
           <div class="modal-body">
-            <p>Are you sure you want to delete this FAQ?</p>
-            <p><strong>Category:</strong> {{ selectedFaq.category }}</p>
-            <p><strong>Question:</strong> {{ selectedFaq.question }}</p>
+            <b style="margin: 5px">Are you sure you want to delete this FAQ?</b>
+            <p style="margin: 5px; color: gray">
+              Category: {{ selectedFaq.category }}
+            </p>
+            <p style="margin: 5px; color: gray">
+              Question: {{ selectedFaq.question }}
+            </p>
           </div>
           <div class="modal-footer">
             <button
               @click="handleDeleteConfirm"
-              class="btn btn-danger"
+              class="btn-sm btn btn-danger"
               data-bs-dismiss="modal"
             >
               Yes, Delete
             </button>
             <button
               type="button"
-              class="btn btn-secondary"
+              class="btn-sm btn btn-secondary"
               data-bs-dismiss="modal"
             >
               Cancel
@@ -155,13 +171,13 @@ import CreateModal from "@/components/CreateModal.vue";
 
 // import "bootstrap/dist/css/bootstrap.min.css";
 import bootstrap from "bootstrap/dist/js/bootstrap.bundle.min.js";
-import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
+// import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 
 DataTable.use(DataTableBs5);
 
 const options = {
   responsive: true,
-  select: true
+  select: true,
 };
 
 const createFormErrors = ref({
@@ -179,10 +195,10 @@ const createModalFields = ref([
 const columns = [
   { data: "category", title: "Category" },
   { data: "question", title: "Question" },
-  { data: "answer", title: "Answer", width: "50%", },
+  { data: "answer", title: "Answer", width: "50%" },
   {
     data: null,
-    title: "",
+    title: "Edit",
     className: "center",
     orderable: false,
     width: "5%",
@@ -194,7 +210,7 @@ const columns = [
   },
   {
     data: null,
-    title: "",
+    title: "Delete",
     className: "center",
     orderable: false,
     width: "5%",
@@ -227,7 +243,7 @@ onMounted(() => {
 
   dt = table.value.dt;
 
-  dt.dataTable
+  dt.dataTable;
 
   const createModal = document.getElementById("createModal");
   createModal.addEventListener("hidden.bs.modal", clearNewFaq);
@@ -407,5 +423,9 @@ table.dataTable td {
   flex-direction: row !important;
   align-items: center !important;
   justify-content: center !important;
+}
+
+.rounded {
+  border-radius: 1vw;
 }
 </style>

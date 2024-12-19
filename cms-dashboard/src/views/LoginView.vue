@@ -8,7 +8,7 @@
       /* background-color: white; */
       border-radius: 1vh;
       width: 100%;
-      margin: 1vw;
+      height: 100vh;
     "
   >
     <div class="col-md-6 mb-4">
@@ -72,11 +72,11 @@
         class="w-100 d-flex justify-content-center mt-4 align-content-center"
       >
         <p class="text-dark mb-0" style="text-align: center">
-          Don't have an account yet?&nbsp;<a
+          Forgot your password?&nbsp;<a
             href="/register"
             style="text-decoration: none"
             class="text-danger"
-            >Register right here!</a
+            >Reset it here!</a
           >
         </p>
       </div>

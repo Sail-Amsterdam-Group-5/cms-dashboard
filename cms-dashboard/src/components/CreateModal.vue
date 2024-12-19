@@ -19,7 +19,7 @@
           ></button>
         </div>
         <div class="modal-body">
-          <form @submit.prevent="handleSubmit">
+          <form @submit.prevent="handleSubmit" id="create-form">
             <div v-for="(field, index) in fields" :key="index" class="mb-3">
               <label class="form-label">{{ field.label }}</label>
               <input
@@ -31,19 +31,20 @@
                 {{ formErrors[field.key] }}
               </span>
             </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">
-                {{ submitText }}
-              </button>
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Cancel
-              </button>
-            </div>
           </form>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">
+            {{ submitText }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            form="create-form"
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>
@@ -51,7 +52,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted } from "vue";
 
 // Props
 const props = defineProps({
@@ -61,7 +62,7 @@ const props = defineProps({
   },
   title: {
     type: String,
-    default: 'Create',
+    default: "Create",
   },
   fields: {
     type: Array,
@@ -69,7 +70,7 @@ const props = defineProps({
   },
   submitText: {
     type: String,
-    default: 'Save',
+    default: "Save",
   },
   errors: {
     type: Object,
@@ -78,7 +79,7 @@ const props = defineProps({
 });
 
 // Local state
-const formData = ref({});  // Initialize formData as an empty object
+const formData = ref({}); // Initialize formData as an empty object
 const formErrors = ref({ ...props.errors });
 
 // Watch for props changes to update the errors
@@ -90,17 +91,17 @@ watch(
 );
 
 // Emitters
-const emit = defineEmits(['submit']);
+const emit = defineEmits(["submit"]);
 
 // Methods
 const handleSubmit = () => {
-  emit('submit', formData.value);  // Emit the updated formData
+  emit("submit", formData.value); // Emit the updated formData
 };
 
 // Reset form on modal close
 onMounted(() => {
   const modalElement = document.getElementById(props.modalId);
-  modalElement?.addEventListener('hidden.bs.modal', () => {
+  modalElement?.addEventListener("hidden.bs.modal", () => {
     formData.value = {}; // Reset form data to empty object
     formErrors.value = {}; // Clear errors
   });

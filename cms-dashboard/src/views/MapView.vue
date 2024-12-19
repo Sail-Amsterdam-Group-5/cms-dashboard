@@ -1,144 +1,201 @@
 <template>
   <div
     style="
-      background-color: white;
-      box-shadow: 5px 5px 10px rgb(0, 0, 0, 0.2);
-      border: 1px solid rgb(187, 187, 187);
-      border-radius: 1vh;
+      display: flex;
+      flex-direction: column;
+      gap: 1vw;
       width: 100%;
-      margin: 1vw;
+      padding: 1vw;
     "
   >
-    <div style="padding: 3vw; display: flex; flex-direction: column; gap: 20px">
-      <h1 style="margin-bottom: 0px !important">Map</h1>
-      <button
-        class="btn btn-primary w-25"
-        data-bs-toggle="modal"
-        data-bs-target="#createModal"
-      >
-        + Add new
-      </button>
-      <div style="font-size: 14px">
-        <DataTable
-          ref="table"
-          :columns="columns"
-          :options="options"
-          :data="locations"
-          class="table display table-striped"
-          width="100%"
-        />
-      </div>
-    </div>
-
-    <!-- Edit Modal -->
     <div
-      class="modal fade"
-      id="editModal"
-      style="z-index: 10000 !important"
-      tabindex="-1"
-      aria-labelledby="editModalLabel"
-      aria-hidden="true"
+      style="
+        background-color: white;
+        box-shadow: 5px 5px 10px rgb(0, 0, 0, 0.1);
+        border: 1px solid rgb(187, 187, 187);
+        border-radius: 1vh;
+        width: 100%;
+      "
     >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="editModalLabel">Edit Location</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form @submit.prevent="handleEditSubmit">
-              <div class="mb-3">
-                <label class="form-label">Longitude:</label>
-                <input
-                  v-model="selectedLocation.location.longitude"
-                  type="text"
-                  class="form-control"
-                />
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Latitude:</label>
-                <input
-                  v-model="selectedLocation.location.latitude"
-                  type="text"
-                  class="form-control"
-                />
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Image URL:</label>
-                <input
-                  v-model="selectedLocation.imageURL"
-                  type="text"
-                  class="form-control"
-                />
-              </div>
-              <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
+      <div
+        style="padding: 1.5vw; display: flex; flex-direction: column; gap: 20px"
+      >
+        <div style="display: flex; flex-direction: column; gap: 20px">
+          <p style="font-size: 22px; margin-bottom: 0px !important">
+            Locations
+          </p>
+          <button
+            class="btn btn-primary btn-sm w-100"
+            data-bs-toggle="modal"
+            data-bs-target="#createModal"
+          >
+            + Add new
+          </button>
+          <div style="font-size: 14px">
+            <DataTable
+              ref="table"
+              :columns="columns"
+              :options="options"
+              :data="locations"
+              class="table display table-striped table-bordered align-middle"
+              width="100%"
+            />
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Delete Modal -->
     <div
-      class="modal fade"
-      id="deleteModal"
-      tabindex="-1"
-      style="z-index: 10000 !important"
-      aria-labelledby="deleteModalLabel"
-      aria-hidden="true"
+      style="
+        background-color: white;
+        box-shadow: 5px 5px 10px rgb(0, 0, 0, 0.1);
+        border: 1px solid rgb(187, 187, 187);
+        border-radius: 1vh;
+        width: 100%;
+      "
     >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="deleteModalLabel">Delete Location</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+      <div
+        style="
+          padding: 1.5vw;
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        "
+      >
+        <div style="display: flex; flex-direction: column; gap: 20px">
+          <p style="font-size: 22px; margin-bottom: 0px !important">
+            Utilities
+          </p>
+          <button
+            class="btn btn-primary btn-sm w-100"
+            data-bs-toggle="modal"
+            data-bs-target="#createModal"
+          >
+            + Add new
+          </button>
+          <div style="font-size: 14px">
+            <DataTable
+              ref="table"
+              :columns="utilitiesColumns"
+              :options="options"
+              :data="utilities"
+              class="table display table-striped table-bordered align-middle"
+              width="100%"
+            />
           </div>
-          <div class="modal-body">
-            <p>Are you sure you want to delete this location?</p>
-            <p>
-              <strong>Longitude:</strong>
-              {{ selectedLocation.location.longitude }}
-            </p>
-            <p>
-              <strong>Latitude:</strong>
-              {{ selectedLocation.location.latitude }}
-            </p>
-          </div>
-          <div class="modal-footer">
-            <button
-              @click="handleDeleteConfirm"
-              class="btn btn-danger"
-              data-bs-dismiss="modal"
-            >
-              Yes, Delete
-            </button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Cancel
-            </button>
-          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div
+    class="modal fade"
+    id="editModal"
+    style="z-index: 10000 !important"
+    tabindex="-1"
+    aria-labelledby="editModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Edit Location</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form @submit.prevent="handleEditSubmit">
+            <div class="mb-3">
+              <label class="form-label">Longitude:</label>
+              <input
+                v-model="selectedLocation.location.longitude"
+                type="text"
+                class="form-control"
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Latitude:</label>
+              <input
+                v-model="selectedLocation.location.latitude"
+                type="text"
+                class="form-control"
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Image URL:</label>
+              <input
+                v-model="selectedLocation.imageURL"
+                type="text"
+                class="form-control"
+              />
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Save</button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Modal -->
+  <div
+    class="modal fade"
+    id="deleteModal"
+    tabindex="-1"
+    style="z-index: 10000 !important"
+    aria-labelledby="deleteModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Delete Location</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this location?</p>
+          <p>
+            <strong>Longitude:</strong>
+            {{ selectedLocation.location.longitude }}
+          </p>
+          <p>
+            <strong>Latitude:</strong>
+            {{ selectedLocation.location.latitude }}
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button
+            @click="handleDeleteConfirm"
+            class="btn btn-danger"
+            data-bs-dismiss="modal"
+          >
+            Yes, Delete
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>
@@ -176,9 +233,13 @@ const table = ref();
 const options = {
   responsive: true,
   select: true,
+  columnDefs: [
+    { className: "dt-center", targets: "_all" }, // Center align all columns
+  ],
 };
 
 const locations = ref([]);
+const utilities = ref([]);
 
 const selectedLocation = ref({ location: {}, imageURL: "" });
 
@@ -188,16 +249,49 @@ const createFormErrors = ref({
   imageURL: "",
 });
 
-const columns = [
+const utilitiesColumns = [
   { data: "id", title: "ID" },
-  { data: "location.longitude", title: "Longitude" },
-  { data: "location.latitude", title: "Latitude" },
+  { data: "name", title: "Name" },
+  { data: "description", title: "Description" },
+  { data: "locationId", title: "LocationID" },
+  { data: "type", title: "Type" },
+  { data: "dates", title: "Dates" },
+  {
+    data: null,
+    title: "",
+    className: "center",
+    orderable: false,
+    width: "5%",
+    render: function (row) {
+      return `
+        <svg width='25px' style="border-radius: 5px; padding: 5px; background-color: #909090;cursor: pointer" data-id="${row.id}" class="edit-link" data-bs-toggle="modal" data-bs-target="#editModal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="white" d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1 0 32c0 8.8 7.2 16 16 16l32 0zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"/></svg>
+      `;
+    },
+  },
+  {
+    data: null,
+    title: "",
+    className: "center",
+    orderable: false,
+    width: "5%",
+    render: function (data, type, row) {
+      return `
+      <svg width='25px' style="border-radius: 5px; padding: 5px; background-color: #ff3d3d;cursor: pointer" data-id="${row.id}" class="delete-link" data-bs-toggle="modal" data-bs-target="#deleteModal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="white" d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>
+      `;
+    },
+  },
+];
+
+const columns = [
+  { data: "id", title: "ID", className: "center" },
+  { data: "location.longitude", title: "Longitude", className: "center" },
+  { data: "location.latitude", title: "Latitude", className: "center" },
   {
     data: "imageURL",
     title: "Image URL",
     render: function (row) {
       return `
-      <img src="${row}" alt="Image" style="max-width: 100px; max-height: 100px;">
+      <img src="${row}" alt="Image" style="width: 70px; height: 50px; object-fit: cover; border-radius: 5px;">
     `;
     },
   },
@@ -231,18 +325,26 @@ onMounted(() => {
   document.addEventListener("click", handleTableClick);
 
   dt = table.value.dt;
-  
+
   dt.dataTable;
 
-  loadData();
+  loadLocations();
+  loatUtilities();
 });
 
-const loadData = async () => {
+const loadLocations = async () => {
   try {
-    console.log("loading data...");
     const response = await fetch("/locations");
     locations.value = await response.json();
-    console.log("response: ", locations.value);
+  } catch (error) {
+    console.error("Error fetching locations:", error);
+  }
+};
+
+const loatUtilities = async () => {
+  try {
+    const response = await fetch("/utilities");
+    utilities.value = await response.json();
   } catch (error) {
     console.error("Error fetching locations:", error);
   }
