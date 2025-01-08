@@ -253,7 +253,7 @@ const utilitiesColumns = [
   { data: "id", title: "ID" },
   { data: "name", title: "Name" },
   { data: "description", title: "Description" },
-  { data: "locationId", title: "LocationID" },
+  { data: "location.id", title: "LocationID" },
   { data: "type", title: "Type" },
   { data: "dates", title: "Dates" },
   {

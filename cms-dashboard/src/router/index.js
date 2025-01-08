@@ -22,8 +22,8 @@ const router = createRouter({
       component: FaqView,
     },
     {
-      path: '/login',
-      name: 'login',
+      path: '/sign-in',
+      name: 'sign-in',
       component: LoginView,
     },
     {
@@ -49,10 +49,10 @@ router.beforeEach((to, from, next) => {
 
   authStore.autoLogin();
   
-  if (authStore.loggedIn == false && to.name !== 'login') {
+  if (authStore.loggedIn == false && to.name !== 'sign-in') {
     // Redirect to login if the user is not logged in
     console.log("You are not logged in = " + authStore.loggedIn);
-    next({ name: 'login' });
+    next({ name: 'sign-in' });
   } else {
     console.log("You are logged in and your username is: " + authStore.getUsername + "    the login status is: " + authStore.loggedIn);
     next();

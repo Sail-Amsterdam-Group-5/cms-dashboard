@@ -5,7 +5,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      /* background-color: white; */
       border-radius: 1vh;
       width: 100%;
       height: 100vh;
@@ -107,7 +106,6 @@ export default {
           if (res === false) {
             alert("Invalid username or password");
           } else {
-            console.log("nice password bruh");
             console.log(this.store.loggedIn);
             this.$router.replace("/");
           }

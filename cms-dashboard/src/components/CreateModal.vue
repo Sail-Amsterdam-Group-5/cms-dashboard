@@ -34,7 +34,7 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" class="btn btn-primary" form="create-form">
             {{ submitText }}
           </button>
           <button

@@ -9,9 +9,14 @@ export default defineConfig({
   plugins: [vue(), vueDevTools()],
   server: {
     proxy: {
+      "/login": {
+        target:
+          "http://nginx-service-oscar-dev.apps.inholland.hcs-lab.nl", // Redirect to /login
+        changeOrigin: true,
+        secure: true,
+      },
       "/faqs": {
-        //target: 'https://faq-fastapi-api-oscar-dev.apps.inholland.hcs-lab.nl', // Target API
-        target: "https://sail-faq-api-route-oscar-dev.apps.inholland.hcs-lab.nl",
+        target: "http://nginx-service-oscar-dev.apps.inholland.hcs-lab.nl",
         changeOrigin: true, // Ensures the host header matches the target
         secure: true, // If the API uses HTTPS
       },
@@ -26,7 +31,7 @@ export default defineConfig({
         target: "http://sail-map-api-route-oscar-dev.apps.inholland.hcs-lab.nl",
         changeOrigin: true,
         secure: true,
-      }
+      },
     },
   },
   resolve: {

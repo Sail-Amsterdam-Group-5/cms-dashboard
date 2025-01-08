@@ -165,13 +165,11 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { userStore } from "@/stores/user";
 import DataTable from "datatables.net-vue3";
 import DataTableBs5 from "datatables.net-bs5";
 import CreateModal from "@/components/CreateModal.vue";
-
-// import "bootstrap/dist/css/bootstrap.min.css";
 import bootstrap from "bootstrap/dist/js/bootstrap.bundle.min.js";
-// import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 
 DataTable.use(DataTableBs5);
 
@@ -238,24 +236,37 @@ const newFaq = ref({
 let dt;
 const table = ref();
 
+const store = userStore();
+
 onMounted(() => {
   document.addEventListener("click", handleTableClick);
-
   dt = table.value.dt;
-
   dt.dataTable;
-
   const createModal = document.getElementById("createModal");
   createModal.addEventListener("hidden.bs.modal", clearNewFaq);
 
   loadData();
 });
 
-const loadData = async (callback) => {
+const loadData = async () => {
   try {
-    const response = await fetch("/faqs");
+    // Replace 'your_token' with the actual token value
+    const token = store.getToken; // Retrieve the token from localStorage or your preferred storage method
+
+    const response = await fetch("/faqs", {
+      method: "GET", // Use the appropriate HTTP method
+      headers: {
+        "Content-Type": "application/json", // Specify JSON content type if required
+        Authorization: `Bearer ${token}`, // Include the Bearer token in the Authorization header
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const faqsData = await response.json();
-    faqs.value = faqsData;
+    faqs.value = faqsData; // Assuming faqs is a reactive variable
   } catch (error) {
     console.error("Error fetching FAQs:", error);
   }

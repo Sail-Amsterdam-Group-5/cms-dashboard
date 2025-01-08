@@ -54,7 +54,7 @@ export default {
     logout() {
       // Clear user data and redirect to login page
       this.store.logOut();
-      this.$router.push('/login');
+      this.$router.push('/sign-in');
     },
   },
 };

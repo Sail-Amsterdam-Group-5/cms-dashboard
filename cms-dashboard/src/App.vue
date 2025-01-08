@@ -18,7 +18,7 @@ store.autoLogin();
 <template>
   <div style="display: flex; flex-direction: row">
     <!-- Conditionally show Sidebar if not on the /login route -->
-    <Sidebar v-if="route.path !== '/login'" />
+    <Sidebar v-if="route.path !== '/sign-in'" />
     <RouterView />
   </div>
 </template>

@@ -12,24 +12,22 @@ export const userStore = defineStore("store", {
     username: "",
     email: "",
     roles: "",
-    userId: "",
   }),
   getters: {
     loggedIn: (state) => state.username !== "",
     getUsername: (state) => state.username,
-    getUserId: (state) => state.userId,
+    getEmail: (state) => state.email,
     getToken: (state) => state.token,
   },
   actions: {
     logOut() {
       this.username = "";
-      this.userId = "";
       this.token = "";
       this.refreshToken = "";
       this.tokenType = "";
       this.tokenExpiry = "";
       this.roles = "";
-    
+
       localStorage.removeItem("token");
       localStorage.removeItem("refresh_token");
       localStorage.removeItem("token_type");
@@ -37,123 +35,94 @@ export const userStore = defineStore("store", {
       localStorage.removeItem("username");
       localStorage.removeItem("userId");
       localStorage.removeItem("roles");
-    
+
       axios.defaults.headers.common["Authorization"] = "";
-    
+
       console.log("You have been logged out.");
       console.log(localStorage.getItem("username"));
       console.log(this.loggedIn);
     },
+
     autoLogin() {
       const token = localStorage.getItem("token");
       const username = localStorage.getItem("username");
-      const userId = localStorage.getItem("userId");
-  
-      if (token && username && userId) {
+      const email = localStorage.getItem("email");
+
+      if (token && username && email) {
         // Ensure that all values are properly set
         this.token = token;
         this.username = username;
-        this.userId = userId;
+        this.email = email;
         axios.defaults.headers.common["Authorization"] = "Bearer " + token; // Set the token globally for requests
       } else {
         // If there's no valid session, reset state
-        console.log("No valid user session found.");
+        console.log(`No valid user session found. local values:\nusername: ${username}\nemail: ${email}\ntoken: ${token}`);
         this.token = "";
         this.username = "";
-        this.userId = "";
+        this.email = "";
       }
     },
+
     login(username, password) {
       return new Promise((resolve, reject) => {
-        console.log("Loggin in...");
-        // axios
-        //   .post(
-        //     "http://keycloak-route-oscar-dev.apps.inholland.hcs-lab.nl/realms/sail-amsterdam/protocol/openid-connect/token",
-        //     QueryString.stringify({
-        //       grant_type: "password",
-        //       client_id: "public-client",
-        //       scope: "email openid",
-        //       username: username,
-        //       password: password,
-        //     }),
-        //     {
-        //       headers: {
-        //         "Content-Type": "application/x-www-form-urlencoded",
-        //       },
-        //     }
-        //   )
-        //   .then((res) => {
-        //     console.log(
-        //       "Server login response: " +
-        //         "access_token: " +
-        //         res.data.access_token +
-        //         ", expires_in: " +
-        //         res.data.expires_in
-        //     );
+        // Construct the form data in URL-encoded format
+        const formData = new URLSearchParams();
+        formData.append("grant_type", "password"); // Hardcoded grant_type
+        formData.append("client_id", "public-client"); // Hardcoded client_id
+        formData.append("scope", "email openid"); // Hardcoded scope
+        formData.append("username", username); // Provided by user
+        formData.append("password", password); // Provided by user
 
-        //     // Assign values from the response to the relevant properties
-        //     this.token = res.data.access_token;
-        //     this.refreshToken = res.data.refresh_token;
-        //     this.tokenType = res.data.token_type;
-        //     this.tokenExpiry = res.data.expires_in;
+        // Send the POST request using axios
+        axios
+          .post("/login", formData, {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded", // Specify content type
+            },
+          })
+          .then((res) => {
+            // Assign values from the response to the relevant properties
+            this.token = res.data.access_token;
+            this.refreshToken = res.data.refresh_token;
+            this.tokenType = res.data.token_type;
+            this.tokenExpiry = res.data.expires_in;
 
-        //     // Decode the token to extract user details
-        //     const decodedToken = jwtDecode(res.data.access_token);
-        //     console.log("Decoded Token: ", decodedToken);
+            // Decode the token to extract user details
+            const decodedToken = jwtDecode(res.data.access_token);
+            console.log("Decoded Token: ", decodedToken);
 
-        //     // Access user-specific details from the token
-        //     this.username =
-        //       decodedToken.username || decodedToken.preferred_username;
-        //     this.email = decodedToken.email;
-        //     this.roles =
-        //       decodedToken.resource_access.account.roles || decodedToken.scope;
+            // Access user-specific details from the token
+            this.username =
+              decodedToken.username || decodedToken.preferred_username;
+            this.email = decodedToken.email;
+            this.roles =
+              decodedToken.resource_access.account.roles || decodedToken.scope;
 
-        //     // Add the token to the axios instance so that it is sent with every request
-        //     axios.defaults.headers.common["Authorization"] =
-        //       res.data.token_type + " " + res.data.access_token;
+            // Add the token to the axios instance so that it is sent with every request
+            axios.defaults.headers.common["Authorization"] =
+              res.data.token_type + " " + res.data.access_token;
 
-        //     // Store the token and other relevant data in localStorage
-        //     localStorage.setItem("access_token", res.data.access_token);
-        //     localStorage.setItem("refresh_token", res.data.refresh_token);
-        //     localStorage.setItem("token_type", res.data.token_type);
-        //     localStorage.setItem("token_expiry", res.data.expires_in);
+            // Store the token and other relevant data in localStorage
+            localStorage.setItem("token", res.data.access_token);
+            localStorage.setItem("refresh_token", res.data.refresh_token);
+            localStorage.setItem("token_type", res.data.token_type);
+            localStorage.setItem("token_expiry", res.data.expires_in);
 
-        //     // Optionally store decoded token details for later use
-        //     localStorage.setItem("username", this.username);
-        //     localStorage.setItem("email", this.email);
-        //     localStorage.setItem("roles", JSON.stringify(this.roles));
+            // Optionally store decoded token details for later use
+            localStorage.setItem("username", this.username);
+            localStorage.setItem("email", this.email);
+            localStorage.setItem("roles", JSON.stringify(this.roles));
 
-        // Access user-specific details from the token
-        this.username = "john.doe"; // Fake username
-        this.email = "john.doe@example.com"; // Fake email
-        this.roles = ["teamlead"]; // Fake roles
-        this.userId = "1234";
+            // Log the stored details
+            console.log(
+              `${this.username}\n${this.email}\n${this.roles}\n` +
+                `local values:\nusername: ${this.getUsername}\nemail: ${this.getEmail}\ntoken: ${this.getToken}`
+            );
 
-        // Add the token to the axios instance so that it is sent with every request
-        axios.defaults.headers.common["Authorization"] =
-          "Bearer faketoken123456"; // Fake token for testing
-
-        // Store the token and other relevant data in localStorage
-        localStorage.setItem("token", "faketoken123456"); // Fake access token
-        localStorage.setItem("refresh_token", "fakerefresh123456"); // Fake refresh token
-        localStorage.setItem("token_type", "Bearer"); // Fake token type
-        localStorage.setItem("token_expiry", "3600"); // Fake token expiry (in seconds)
-
-        // Optionally store decoded token details for later use
-        localStorage.setItem("username", this.username); // Fake username
-        localStorage.setItem("email", this.email); // Fake email
-        localStorage.setItem("userId", this.userId); // Fake email
-        localStorage.setItem("roles", JSON.stringify(this.roles)); // Fake roles
-
-        console.log(this.username + '\n'+
-          this.email+ '\n' +
-          this.roles + '\n' + 
-          this.userId + '\n' +
-          'local values: \n userId ' + this.getUserId + 'username: ' + this.getUsername + 'token: ' + this.getToken
-        );
-
-        resolve();
-      }).catch((error) => reject(error));
+            resolve(); // Resolve the promise on success
+          })
+          .catch((error) => reject(error)); // Reject the promise on error
+      });
     },
-  }
+  },
 });
