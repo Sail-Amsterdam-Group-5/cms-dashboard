@@ -103,10 +103,6 @@ import { ref, onMounted } from "vue";
 import DataTable from "datatables.net-vue3";
 import DataTableBs5 from "datatables.net-bs5";
 
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import "bootstrap/dist/js/bootstrap.bundle.min.js";
-// import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
-
 DataTable.use(DataTableBs5);
 
 const options = {

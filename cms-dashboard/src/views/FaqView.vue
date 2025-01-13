@@ -66,6 +66,7 @@
             <form @submit.prevent="handleEditSubmit" id="editForm">
               <div class="mb-3">
                 <label class="form-label">Category:</label>
+                <input type="hidden" id="originalCategory" name="originalCategory" v-model="selectedFaq.originalCategory" />
                 <input
                   v-model="selectedFaq.category"
                   type="text"
@@ -91,15 +92,21 @@
             </form>
           </div>
           <div class="modal-footer">
-              <button type="submit" class="btn-sm btn btn-primary" form="editForm">Save</button>
-              <button
-                type="button"
-                class="btn-sm btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Cancel
-              </button>
-            </div>
+            <button
+              type="submit"
+              class="btn-sm btn btn-primary"
+              form="editForm"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              class="btn-sm btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -223,6 +230,7 @@ const columns = [
 const faqs = ref([]);
 const selectedFaq = ref({
   category: "",
+  originalCategory: "",
   question: "",
   answer: "",
 });
@@ -281,6 +289,7 @@ const handleTableClick = (event) => {
     const faq = faqs.value.find((f) => f.id === faqId);
     if (faq) {
       selectedFaq.value = { ...faq };
+      selectedFaq.value.originalCategory = faq.category;
     }
   }
 
@@ -295,9 +304,12 @@ const handleTableClick = (event) => {
 
 const handleEditSubmit = async () => {
   try {
-    await fetch(`/faqs/${selectedFaq.value.category}/${selectedFaq.value.id}`, {
+    await fetch(`/faqs/${selectedFaq.value.originalCategory}/${selectedFaq.value.id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${store.getToken}`,
+      },
       body: JSON.stringify(selectedFaq.value),
     });
     loadData(); // Reload data
@@ -310,6 +322,10 @@ const handleDeleteConfirm = async () => {
   try {
     await fetch(`/faqs/${selectedFaq.value.category}/${selectedFaq.value.id}`, {
       method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${store.getToken}`,
+      },
     });
     loadData(); // Reload data
   } catch (error) {
@@ -321,7 +337,10 @@ const handleCreateSubmit = async (formData) => {
   try {
     const response = await fetch(`/faqs`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${store.getToken}`,
+      },
       body: JSON.stringify(formData),
     });
 

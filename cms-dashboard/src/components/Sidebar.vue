@@ -28,6 +28,11 @@
           </button>
         </li>
         <li>
+          <button @click="this.$router.push('/utilities');" class="menu-item">
+            Utilities
+          </button>
+        </li>
+        <li>
           <button @click="logout" class="menu-item logout">
             Logout
           </button>

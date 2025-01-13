@@ -8,7 +8,7 @@
       padding: 1vw;
     "
   >
-    <div
+  <div
       style="
         background-color: white;
         box-shadow: 5px 5px 10px rgb(0, 0, 0, 0.1);
@@ -22,7 +22,7 @@
       >
         <div style="display: flex; flex-direction: column; gap: 20px">
           <p style="font-size: 22px; margin-bottom: 0px !important">
-            Locations
+            Utilities
           </p>
           <button
             class="btn btn-primary btn-sm w-100"
@@ -34,9 +34,9 @@
           <div style="font-size: 14px">
             <DataTable
               ref="table"
-              :columns="columns"
-              :options="locationsOptions"
-              :data="locations"
+              :columns="utilitiesColumns"
+              :options="options"
+              :data="utilities"
               class="table display table-striped table-bordered align-middle"
               width="100%"
             />
@@ -44,9 +44,8 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Edit Modal -->
+    <!-- Edit Modal -->
   <div
     class="modal fade"
     id="editModal"
@@ -166,6 +165,7 @@
     :errors="createFormErrors"
     @submit="handleCreateSubmit"
   />
+  </div>
 </template>
 
 <script setup>
