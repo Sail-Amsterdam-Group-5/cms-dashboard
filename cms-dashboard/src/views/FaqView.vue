@@ -26,11 +26,7 @@
       >
         + Add new
       </button>
-      <div
-        style="
-          font-size: 14px; /*border-style: solid; border-width: 1px; border-color: lightgray; padding: 1vw; border-radius: 1vh;*/
-        "
-      >
+      <div style="font-size: 14px">
         <DataTable
           ref="table"
           :columns="columns"
@@ -66,7 +62,12 @@
             <form @submit.prevent="handleEditSubmit" id="editForm">
               <div class="mb-3">
                 <label class="form-label">Category:</label>
-                <input type="hidden" id="originalCategory" name="originalCategory" v-model="selectedFaq.originalCategory" />
+                <input
+                  type="hidden"
+                  id="originalCategory"
+                  name="originalCategory"
+                  v-model="selectedFaq.originalCategory"
+                />
                 <input
                   v-model="selectedFaq.category"
                   type="text"
@@ -304,14 +305,17 @@ const handleTableClick = (event) => {
 
 const handleEditSubmit = async () => {
   try {
-    await fetch(`/faqs/${selectedFaq.value.originalCategory}/${selectedFaq.value.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${store.getToken}`,
-      },
-      body: JSON.stringify(selectedFaq.value),
-    });
+    await fetch(
+      `/faqs/${selectedFaq.value.originalCategory}/${selectedFaq.value.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${store.getToken}`,
+        },
+        body: JSON.stringify(selectedFaq.value),
+      }
+    );
     loadData(); // Reload data
   } catch (error) {
     console.error("Error updating FAQ:", error);

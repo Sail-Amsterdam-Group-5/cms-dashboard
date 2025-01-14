@@ -18,13 +18,8 @@
           </button>
         </li>
         <li>
-          <button @click="this.$router.push('/users');" class="menu-item">
-            Users
-          </button>
-        </li>
-        <li>
           <button @click="this.$router.push('/map');" class="menu-item">
-            Map
+            Locations
           </button>
         </li>
         <li>
