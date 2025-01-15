@@ -22,11 +22,31 @@
           <form @submit.prevent="handleSubmit" id="create-form">
             <div v-for="(field, index) in fields" :key="index" class="mb-3">
               <label class="form-label">{{ field.label }}</label>
-              <input
-                v-model="formData[field.key]"
-                :type="field.type || 'text'"
-                :class="['form-control', field.class || '']"
-              />
+
+              <!-- Render Input or Select based on the presence of `options` -->
+              <template v-if="field.options && field.options.length">
+                <select
+                  v-model="formData[field.key]"
+                  class="form-select"
+                  :class="field.class || ''"
+                >
+                  <option
+                    v-for="option in field.options"
+                    :key="option.value"
+                    :value="option.value"
+                  >
+                    {{ option.label }}
+                  </option>
+                </select>
+              </template>
+              <template v-else>
+                <input
+                  v-model="formData[field.key]"
+                  :type="field.type || 'text'"
+                  :class="['form-control', field.class || '']"
+                />
+              </template>
+
               <span v-if="formErrors[field.key]" class="text-danger small">
                 {{ formErrors[field.key] }}
               </span>

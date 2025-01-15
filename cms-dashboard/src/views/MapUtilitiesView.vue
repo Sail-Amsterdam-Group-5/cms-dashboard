@@ -90,7 +90,9 @@
                   v-model="selectedUtility.location.id"
                   class="form-select"
                 >
-                  <option selected :value="selectedUtility.location.id">{{ selectedUtility.location.name }}</option>
+                  <option selected :value="selectedUtility.location.id">
+                    {{ selectedUtility.location.name }}
+                  </option>
                   <option
                     v-for="location in locations"
                     :key="location.id"
@@ -194,7 +196,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { computed, ref, onMounted } from "vue";
 import DataTable from "datatables.net-vue3";
 import DataTableBs5 from "datatables.net-bs5";
 import CreateModal from "@/components/CreateModal.vue";
@@ -203,14 +205,6 @@ import bootstrap from "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 
 DataTable.use(DataTableBs5);
-
-const createModalFields = ref([
-  { label: "Name", key: "name", type: "text" },
-  { label: "Description", key: "description", type: "text" },
-  { label: "Location", key: "location", type: "text" },
-  { label: "Dates", key: "dates", type: "text" },
-  { label: "Type", key: "type", type: "text" },
-]);
 
 let dt;
 const table = ref();
@@ -319,40 +313,123 @@ const handleTableClick = (event) => {
   }
 };
 
+// Computed property for location select options
+const createModalLocationSelectOptions = computed(() =>
+  locations.value.length
+    ? locations.value.map((location) => ({
+        label: location.name,
+        value: location.id,
+      }))
+    : [{ label: "Loading locations...", value: "" }]
+);
+
+console.log(
+  "createModalLocationSelectOptions: ",
+  createModalLocationSelectOptions
+);
+
+// Create Modal Fields
+const createModalFields = computed(() => [
+  { label: "Name", key: "name", type: "text" },
+  { label: "Description", key: "description", type: "text" },
+  {
+    label: "Location",
+    key: "locationId",
+    type: "select",
+    options: createModalLocationSelectOptions.value,
+  },
+  { label: "Dates", key: "dates", type: "text" },
+  { label: "Type", key: "type", type: "text" },
+]);
+
 const handleEditSubmit = async () => {
   // PUT request to update location
+  const formattedData = {
+    name: selectedUtility.value.name,
+    description: selectedUtility.value.description,
+    locationId: selectedUtility.value.location.id,
+    type: selectedUtility.value.type,
+    dates: selectedUtility.value.dates,
+  };
+
+  try {
+    const response = await fetch(`/utilities/${selectedUtility.value.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formattedData),
+    });
+
+    if (response.ok) {
+      // Update the utility in the utilities array
+      const updatedUtility = await response.json(); // Get the updated utility from the response
+      const index = utilities.value.findIndex(
+        (f) => f.id === updatedUtility.id
+      );
+      utilities.value[index] = updatedUtility;
+
+      // Close the modal
+      let myModalEl = document.querySelector("#editModal");
+      let modal = bootstrap.Modal.getOrCreateInstance(myModalEl);
+      modal.hide();
+    } else {
+      console.error("Error updating utility:", response);
+    }
+  } catch (error) {
+    console.error("Error updating utility:", error);
+  }
 };
 
 const handleDeleteConfirm = async () => {
   // DELETE request for location
+  try {
+    const response = await fetch(`/utilities/${selectedUtility.value.id}`, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      // Remove the utility from the utilities array
+      utilities.value = utilities.value.filter(
+        (f) => f.id !== selectedUtility.value.id
+      );
+
+      // Close the modal
+      let myModalEl = document.querySelector("#deleteModal");
+      let modal = bootstrap.Modal.getOrCreateInstance(myModalEl);
+      modal.hide();
+    } else {
+      console.error("Error deleting utility:", response);
+    }
+  } catch (error) {
+    console.error("Error deleting utility:", error);
+  }
 };
 
 const handleCreateSubmit = async (formData) => {
   console.log("Form data before submission:", formData);
   const formattedData = {
-    location: {
-      latitude: formData.latitude,
-      longitude: formData.longitude,
-    },
-    imageURL: formData.imageURL,
+    name: formData.name,
+    description: formData.description,
+    locationId: formData.locationId,
+    type: formData.type,
+    dates: formData.dates,
   };
   console.log("Form data after submission:", formattedData);
 
   try {
-    const response = await fetch(`/locations`, {
+    const response = await fetch(`/utilities`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formattedData), // Replace `newFaq` with `newLocation`
+      body: JSON.stringify(formattedData),
     });
 
     if (response.ok) {
-      // Add the newly created location to the locations array
-      const createdLocation = await response.json(); // Get the created location from the response
+      // Add the newly created utility to the utilities array
+      const createdUtility = await response.json(); // Get the created utility from the response
 
-      // Add the newly created location to the locations array
-      locations.value.push(createdLocation);
+      // Add the newly created utility to the utilities array
+      utilities.value.push(createdUtility);
 
-      console.log("Locations after pushing: ", locations.value);
+      console.log("utilities after pushing: ", utilities.value);
 
       // Clear the form errors
       createFormErrors.value = { latitude: "", longitude: "", imageURL: "" };
@@ -380,7 +457,7 @@ const handleCreateSubmit = async (formData) => {
       }
     }
   } catch (error) {
-    console.error("Error while creating location:", error);
+    console.error("Error while creating the utility:", error);
   }
 };
 </script>
