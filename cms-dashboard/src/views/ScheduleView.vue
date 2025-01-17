@@ -75,7 +75,7 @@
                 />
               </div>
               <div class="mb-3">
-                <label class="form-label">Question:</label>
+                <label class="form-label">Description:</label>
                 <input
                   v-model="selectedTask.question"
                   type="text"
