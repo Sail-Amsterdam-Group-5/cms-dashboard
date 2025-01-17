@@ -103,7 +103,7 @@ jobs:
 
       # Step 8: Switch to the target OpenShift namespace/project
       - name: Switch to namespace
-        run: oc project your-openshift-namespace
+        run: oc project oscar-dev
 
       # Step 9: Apply Deployment Configuration
       - name: Apply deployment configuration
