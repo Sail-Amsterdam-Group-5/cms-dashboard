@@ -302,7 +302,7 @@ const handleEditSubmit = async () => {
   // PUT request to update location
   try {
     await fetch(`/locations/${selectedLocation.value.id}`, {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },

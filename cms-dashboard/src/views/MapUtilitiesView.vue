@@ -200,7 +200,7 @@ import { computed, ref, onMounted } from "vue";
 import DataTable from "datatables.net-vue3";
 import DataTableBs5 from "datatables.net-bs5";
 import CreateModal from "@/components/CreateModal.vue";
-
+import { userStore } from "@/stores/user";
 import bootstrap from "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 
@@ -223,6 +223,8 @@ const locations = ref([]);
 
 const selectedUtility = ref({ utility: {} });
 
+const store = userStore();
+
 const createFormErrors = ref({
   name: "",
   description: "",
@@ -235,7 +237,7 @@ const utilitiesColumns = [
   { data: "id", title: "ID" },
   { data: "name", title: "Name" },
   { data: "description", title: "Description" },
-  { data: "location.id", title: "LocationID" },
+  { data: "location.name", title: "Location" },
   { data: "type", title: "Type" },
   { data: "dates", title: "Dates" },
   {
@@ -285,7 +287,13 @@ const loadUtilities = async () => {
 
 const loadLocations = async () => {
   try {
-    const response = await fetch("/locations");
+    const response = await fetch("/locations", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${store.getToken}`
+      },
+    });
     locations.value = await response.json();
   } catch (error) {
     console.error("Error fetching locations:", error);
@@ -321,11 +329,6 @@ const createModalLocationSelectOptions = computed(() =>
         value: location.id,
       }))
     : [{ label: "Loading locations...", value: "" }]
-);
-
-console.log(
-  "createModalLocationSelectOptions: ",
-  createModalLocationSelectOptions
 );
 
 // Create Modal Fields

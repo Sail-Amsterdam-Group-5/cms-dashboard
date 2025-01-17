@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import axios from "axios";
-import QueryString from "qs";
 import { jwtDecode } from "jwt-decode";
 
 export const userStore = defineStore("store", {
@@ -56,7 +55,6 @@ export const userStore = defineStore("store", {
         axios.defaults.headers.common["Authorization"] = "Bearer " + token; // Set the token globally for requests
       } else {
         // If there's no valid session, reset state
-        console.log(`No valid user session found. local values:\nusername: ${username}\nemail: ${email}\ntoken: ${token}`);
         this.token = "";
         this.username = "";
         this.email = "";
@@ -75,7 +73,7 @@ export const userStore = defineStore("store", {
 
         // Send the POST request using axios
         axios
-          .post("/login", formData, {
+          .post("http://nginx-service-oscar-dev.apps.inholland.hcs-lab.nl/login", formData, {
             headers: {
               "Content-Type": "application/x-www-form-urlencoded", // Specify content type
             },
@@ -89,7 +87,6 @@ export const userStore = defineStore("store", {
 
             // Decode the token to extract user details
             const decodedToken = jwtDecode(res.data.access_token);
-            console.log("Decoded Token: ", decodedToken);
 
             // Access user-specific details from the token
             this.username =
@@ -112,12 +109,6 @@ export const userStore = defineStore("store", {
             localStorage.setItem("username", this.username);
             localStorage.setItem("email", this.email);
             localStorage.setItem("roles", JSON.stringify(this.roles));
-
-            // Log the stored details
-            console.log(
-              `${this.username}\n${this.email}\n${this.roles}\n` +
-                `local values:\nusername: ${this.getUsername}\nemail: ${this.getEmail}\ntoken: ${this.getToken}`
-            );
 
             resolve(); // Resolve the promise on success
           })

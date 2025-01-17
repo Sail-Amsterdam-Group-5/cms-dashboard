@@ -8,6 +8,11 @@
           </button>
         </li>
         <li>
+          <button @click="this.$router.push('/user');" class="menu-item">
+            Users
+          </button>
+        </li>
+        <li>
           <button @click="this.$router.push('/faq');" class="menu-item">
             FAQs
           </button>

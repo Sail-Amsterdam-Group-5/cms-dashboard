@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vue-app-deployment
+  namespace: oscar-dev
+  labels:
+    app: vue-app
+spec:
+  replicas: 1 # Single instance for this example, can be scaled later
+  selector:
+    matchLabels:
+      app: vue-app
+  template:
+    metadata:
+      labels:
+        app: vue-app
+    spec:
+      containers:
+        - name: vue-app
+          image: 690828/sail-cms-dashboard:latest # Replace with your private or public image
+          ports:
+            - containerPort: 80 # Nginx or Vue app usually serves on port 80
+          resources:
+            limits:
+              cpu: "0.5" # CPU limit (adjust as needed)
+              memory: "500Mi" # Memory limit (adjust as needed)
+            requests:
+              cpu: "0.2" # CPU request (adjust as needed)
+              memory: "200Mi" # Memory request (adjust as needed)
+      imagePullSecrets:
+        - name: cms-regcred # Use this if your Docker image is private
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vue-app-service
+  namespace: oscar-dev
+spec:
+  selector:
+    app: vue-app
+  ports:
+    - protocol: TCP
+      port: 80 # Service will be accessible on port 80
+      targetPort: 80 # Matches the container's port
+
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: vue-app-route
+  namespace: oscar-dev
+spec:
+  to:
+    kind: Service
+    name: vue-app-service
+  port:
+    targetPort: 80 # Route to the service on port 80
+  tls:
+    termination: edge # Optional TLS termination at edge
+    insecureEdgeTerminationPolicy: Redirect
+    

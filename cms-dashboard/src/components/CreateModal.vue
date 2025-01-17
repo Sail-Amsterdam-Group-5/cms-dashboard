@@ -7,7 +7,7 @@
     :aria-labelledby="`${modalId}Label`"
     aria-hidden="true"
   >
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered" :class="{ ' modal-lg': fields.length > 6 }">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" :id="`${modalId}Label`">{{ title }}</h5>
@@ -20,36 +20,76 @@
         </div>
         <div class="modal-body">
           <form @submit.prevent="handleSubmit" id="create-form">
-            <div v-for="(field, index) in fields" :key="index" class="mb-3">
-              <label class="form-label">{{ field.label }}</label>
-
-              <!-- Render Input or Select based on the presence of `options` -->
-              <template v-if="field.options && field.options.length">
-                <select
-                  v-model="formData[field.key]"
-                  class="form-select"
-                  :class="field.class || ''"
-                >
-                  <option
-                    v-for="option in field.options"
-                    :key="option.value"
-                    :value="option.value"
+            <!-- Conditionally render as rows or two columns -->
+            <div v-if="fields.length > 6" class="row">
+              <div
+                v-for="(field, index) in fields"
+                :key="index"
+                class="col-12 col-md-6 mb-3"
+              >
+                <label class="form-label">{{ field.label }}</label>
+                <template v-if="field.options && field.options.length">
+                  <select
+                    v-model="formData[field.key]"
+                    class="form-select"
+                    :class="field.class || ''"
                   >
-                    {{ option.label }}
-                  </option>
-                </select>
-              </template>
-              <template v-else>
-                <input
-                  v-model="formData[field.key]"
-                  :type="field.type || 'text'"
-                  :class="['form-control', field.class || '']"
-                />
-              </template>
+                    <option
+                      v-for="option in field.options"
+                      :key="option.value"
+                      :value="option.value"
+                    >
+                      {{ option.label }}
+                    </option>
+                  </select>
+                </template>
+                <template v-else>
+                  <input
+                    v-model="formData[field.key]"
+                    :type="field.type || 'text'"
+                    :class="['form-control', field.class || '']"
+                  />
+                </template>
+                <span v-if="formErrors[field.key]" class="text-danger small">
+                  {{ formErrors[field.key] }}
+                </span>
+              </div>
+            </div>
 
-              <span v-if="formErrors[field.key]" class="text-danger small">
-                {{ formErrors[field.key] }}
-              </span>
+            <!-- Default single-column layout -->
+            <div v-else>
+              <div
+                v-for="(field, index) in fields"
+                :key="index"
+                class="mb-3"
+              >
+                <label class="form-label">{{ field.label }}</label>
+                <template v-if="field.options && field.options.length">
+                  <select
+                    v-model="formData[field.key]"
+                    class="form-select"
+                    :class="field.class || ''"
+                  >
+                    <option
+                      v-for="option in field.options"
+                      :key="option.value"
+                      :value="option.value"
+                    >
+                      {{ option.label }}
+                    </option>
+                  </select>
+                </template>
+                <template v-else>
+                  <input
+                    v-model="formData[field.key]"
+                    :type="field.type || 'text'"
+                    :class="['form-control', field.class || '']"
+                  />
+                </template>
+                <span v-if="formErrors[field.key]" class="text-danger small">
+                  {{ formErrors[field.key] }}
+                </span>
+              </div>
             </div>
           </form>
         </div>
@@ -70,6 +110,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, watch, onMounted } from "vue";

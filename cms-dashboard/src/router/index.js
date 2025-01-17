@@ -4,7 +4,7 @@ import { userStore } from '@/stores/user';
 import HomeView from '../views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import FaqView from '@/views/FaqView.vue'
-import UsersView from '@/views/UsersView.vue'
+import UserView from '@/views/UserView.vue'
 import ScheduleView from '@/views/ScheduleView.vue'
 import MapView from '@/views/MapView.vue'
 import UtilitiesView from '@/views/MapUtilitiesView.vue'
@@ -33,9 +33,9 @@ const router = createRouter({
       component: ScheduleView,
     },
     {
-      path: '/users',
-      name: 'users',
-      component: UsersView,
+      path: '/user',
+      name: 'user',
+      component: UserView,
     },
     {
       path: '/map',

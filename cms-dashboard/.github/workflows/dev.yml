@@ -1,0 +1,105 @@
+name: Vue.js CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - 'features/**'
+      - dev
+    paths:
+      - '**/*.js'
+      - '**/*.vue'
+      - '**/package.json'
+      - '**/package-lock.json'
+      - 'deployment.yml'
+  pull_request:
+    branches:
+      - 'features/**'
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout Code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js Environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '23'
+
+      # Step 3: Install Dependencies
+      - name: Install dependencies
+        run: |
+          npm install
+          npm install eslint stylelint # Install linting tools
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js Environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '23'
+
+      # Step 3: Install Dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Build Vue.js App
+      - name: Build Vue.js app
+        run: npm run build
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Docker (optional, if you need to build the container locally)
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      # Step 3: Build the Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t 690828/sail-cms-dashboard:latest .
+
+      # Step 4: Log in to DockerHub
+      - name: Log in to DockerHub
+        run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login --username ${{ secrets.DOCKER_ID }} --password-stdin
+
+      # Step 5: Push Docker image to DockerHub
+      - name: Push Docker image to DockerHub
+        run: docker push 690828/sail-cms-dashboard:latest
+
+      # Step 6: Set up OpenShift CLI
+      - name: Install OpenShift CLI
+        run: |
+          curl -L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz | tar -xz -C /usr/local/bin
+          oc version
+
+      # Step 7: Log in to OpenShift
+      - name: Log in to OpenShift
+        run: |
+          oc login --token=${{ secrets.OPENSHIFT_TOKEN }} --server=${{ secrets.OPENSHIFT_SERVER }}
+
+      # Step 8: Switch to the target OpenShift namespace/project
+      - name: Switch to namespace
+        run: oc project your-openshift-namespace
+
+      # Step 9: Apply Deployment Configuration
+      - name: Apply deployment configuration
+        run: |
+          oc apply -f openshift/deployment.yml
