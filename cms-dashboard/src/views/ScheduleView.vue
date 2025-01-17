@@ -61,12 +61,12 @@
           <div class="modal-body">
             <form @submit.prevent="handleEditSubmit" id="editForm">
               <div class="mb-3">
-                <label class="form-label">Category:</label>
+                <label class="form-label">Name:</label>
                 <input
                   type="hidden"
                   id="originalCategory"
                   name="originalCategory"
-                  v-model="selectedTask.originalCategory"
+                  v-model="selectedTask.name"
                 />
                 <input
                   v-model="selectedTask.category"
