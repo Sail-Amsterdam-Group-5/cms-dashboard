@@ -3,11 +3,6 @@
     <nav class="menu">
       <ul class="menu">
         <li>
-          <button @click="goToHome" class="menu-item">
-            Home
-          </button>
-        </li>
-        <li>
           <button @click="this.$router.push('/user');" class="menu-item">
             Users
           </button>
