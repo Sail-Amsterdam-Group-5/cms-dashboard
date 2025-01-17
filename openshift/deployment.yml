@@ -19,7 +19,7 @@ spec:
         - name: vue-app
           image: 690828/sail-cms-dashboard:latest # Replace with your private or public image
           ports:
-            - containerPort: 80 # Nginx or Vue app usually serves on port 80
+            - containerPort: 8080 # Nginx or Vue app usually serves on port 80
           resources:
             limits:
               cpu: "0.2" # CPU limit (adjust as needed)

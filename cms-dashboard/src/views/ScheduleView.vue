@@ -139,7 +139,7 @@
               >Are you sure you want to delete this Task?</b
             >
             <p style="margin: 5px; color: gray">
-              Category: {{ selectedTask.category }}
+              Name: {{ selectedTask.name }}
             </p>
             <p style="margin: 5px; color: gray">
               Question: {{ selectedTask.question }}
