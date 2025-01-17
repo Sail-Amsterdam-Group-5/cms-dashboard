@@ -22,7 +22,7 @@
       <button
         class="btn btn-primary btn-sm w-100"
         data-bs-toggle="modal"
-        data-bs-target="#createModal"
+        data-bs-target="#editModal"
       >
         + Add new
       </button>
@@ -264,7 +264,7 @@ const loadData = async () => {
   try {
     const token = store.getToken;
 
-    const response = await fetch("/faqs", {
+    const response = await fetch("/schedule", {
       method: "GET", // Use the appropriate HTTP method
       headers: {
         "Content-Type": "application/json", // Specify JSON content type if required
