@@ -43,6 +43,12 @@ export default defineConfig({
         changeOrigin: true,
         secure: true,
       },
+      "/schedule": {
+        // Target for Users API
+        target: "http://sail-map-api-route-oscar-dev.apps.inholland.hcs-lab.nl",
+        changeOrigin: true,
+        secure: true,
+      },
     },
   },
   resolve: {

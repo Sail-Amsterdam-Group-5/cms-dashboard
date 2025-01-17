@@ -60,35 +60,37 @@
           </div>
           <div class="modal-body">
             <form @submit.prevent="handleEditSubmit" id="editForm">
-              <div class="mb-3">
-                <label class="form-label">Name:</label>
-                <input
-                  type="hidden"
-                  id="originalCategory"
-                  name="originalCategory"
-                  v-model="selectedTask.name"
-                />
-                <input
-                  v-model="selectedTask.category"
-                  type="text"
-                  class="form-control"
-                />
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Description:</label>
-                <input
-                  v-model="selectedTask.question"
-                  type="text"
-                  class="form-control"
-                />
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Location:</label>
-                <textarea
-                  v-model="selectedTask.answer"
-                  type="text"
-                  class="form-control"
-                ></textarea>
+              <div class="row">
+                <div class="col-12 col-md-6 mb-3">
+                  <label class="form-label">Date</label>
+                  <input type="date" class="form-control" />
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                  <label class="form-label">Description</label>
+                  <input type="text" class="form-control" />
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                  <label class="form-label">Name</label>
+                  <input type="text" class="form-control" />
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                  <label class="form-label">Group</label>
+                  <input type="text" class="form-control" />
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                  <label class="form-label">Location</label>
+                  <select class="form-select">
+                    <option value="">Loading locations...</option>
+                  </select>
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                  <label class="form-label">Start Time</label>
+                  <input type="time" class="form-control" />
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                  <label class="form-label">End Time</label>
+                  <input type="time" class="form-control" />
+                </div>
               </div>
             </form>
           </div>
