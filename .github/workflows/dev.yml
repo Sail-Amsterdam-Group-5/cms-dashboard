@@ -6,11 +6,11 @@ on:
       - 'features/**'
       - dev
     paths:
-      - '**/*.js'
-      - '**/*.vue'
-      - '**/package.json'
-      - '**/package-lock.json'
-      - 'deployment.yml'
+      - 'cms-dashboard/**/*.js' # Target the js files inside cms-dashboard folder
+      - 'cms-dashboard/**/*.vue' # Target vue files inside cms-dashboard folder
+      - 'cms-dashboard/package.json' # Target package.json inside cms-dashboard folder
+      - 'cms-dashboard/package-lock.json' # Target package-lock.json inside cms-dashboard folder
+      - 'deployment.yml' # This can be at the root, no change here
   pull_request:
     branches:
       - 'features/**'
@@ -36,6 +36,7 @@ jobs:
       # Step 3: Install Dependencies
       - name: Install dependencies
         run: |
+          cd cms-dashboard
           npm install
           npm install eslint stylelint # Install linting tools
 
@@ -54,11 +55,15 @@ jobs:
 
       # Step 3: Install Dependencies
       - name: Install dependencies
-        run: npm install
+        run: |
+          cd cms-dashboard
+          npm install
 
       # Step 4: Build Vue.js App
       - name: Build Vue.js app
-        run: npm run build
+        run: |
+          cd cms-dashboard
+          npm run build
 
   deploy:
     runs-on: ubuntu-latest
@@ -74,6 +79,7 @@ jobs:
       # Step 3: Build the Docker image
       - name: Build Docker image
         run: |
+          cd cms-dashboard # Ensure we're in the correct folder
           docker build -t 690828/sail-cms-dashboard:latest .
 
       # Step 4: Log in to DockerHub
