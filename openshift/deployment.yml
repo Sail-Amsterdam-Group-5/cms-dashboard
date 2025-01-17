@@ -41,8 +41,8 @@ spec:
     app: vue-app
   ports:
     - protocol: TCP
-      port: 80 # Service will be accessible on port 80
-      targetPort: 80 # Matches the container's port
+      port: 8080 # Service will be accessible on port 80
+      targetPort: 8080 # Matches the container's port
 
 ---
 apiVersion: route.openshift.io/v1
@@ -55,7 +55,7 @@ spec:
     kind: Service
     name: vue-app-service
   port:
-    targetPort: 80 # Route to the service on port 80
+    targetPort: 8080 # Route to the service on port 80
   tls:
     termination: edge # Optional TLS termination at edge
     insecureEdgeTerminationPolicy: Redirect
