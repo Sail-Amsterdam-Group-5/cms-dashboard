@@ -249,9 +249,14 @@ const selectedTask = ref({
 });
 
 const newTask = ref({
-  category: "",
-  question: "",
-  answer: "",
+  id: "",
+  date: "",
+  description: "",
+  name: "",
+  groupId: "",
+  locationId: "",
+  startTime: "",
+  endTime: "",
 });
 
 onMounted(() => {
