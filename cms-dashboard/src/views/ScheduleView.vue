@@ -142,7 +142,7 @@
               Name: {{ selectedTask.name }}
             </p>
             <p style="margin: 5px; color: gray">
-              Question: {{ selectedTask.question }}
+              Description: {{ selectedTask.description }}
             </p>
           </div>
           <div class="modal-footer">
@@ -238,10 +238,14 @@ const columns = [
 
 const tasks = ref([]);
 const selectedTask = ref({
-  category: "",
-  originalCategory: "",
-  question: "",
-  answer: "",
+  id: "",
+  date: "",
+  description: "",
+  name: "",
+  groupId: "",
+  locationId: "",
+  startTime: "",
+  endTime: "",
 });
 
 const newTask = ref({

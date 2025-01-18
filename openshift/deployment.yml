@@ -56,7 +56,4 @@ spec:
     name: vue-app-service
   port:
     targetPort: 8080 # Route to the service on port 80
-  tls:
-    termination: edge # Optional TLS termination at edge
-    insecureEdgeTerminationPolicy: Redirect
     
