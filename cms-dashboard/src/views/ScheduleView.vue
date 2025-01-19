@@ -144,6 +144,9 @@
             <p style="margin: 5px; color: gray">
               Description: {{ selectedTask.description }}
             </p>
+            <p style="margin: 5px; color: gray">
+              Date: {{ selectedTask.date }}
+            </p>
           </div>
           <div class="modal-footer">
             <button
