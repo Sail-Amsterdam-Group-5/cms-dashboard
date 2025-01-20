@@ -10,11 +10,10 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://nginx-service-oscar-dev.apps.inholland.hcs-lab.nl", // Gateway URL
-        changeOrigin: true, // Ensures the host header matches the target
-        secure: true, // If the API uses HTTPS
-        rewrite: (path) => path.replace(/^\/api/, ""), // Removes the /api prefix
-      },
+        target: "http://nginx-service-oscar-dev.apps.inholland.hcs-lab.nl/",
+        changeOrigin: true,
+        secure: true,
+      }
     },
   },
   resolve: {
