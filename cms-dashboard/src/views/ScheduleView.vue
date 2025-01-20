@@ -147,6 +147,9 @@
             <p style="margin: 5px; color: gray">
               Date: {{ selectedTask.date }}
             </p>
+            <p style="margin: 5px; color: gray">
+              Group: {{ selectedTask.groupId }}
+            </p>
           </div>
           <div class="modal-footer">
             <button
