@@ -150,6 +150,9 @@
             <p style="margin: 5px; color: gray">
               Group: {{ selectedTask.groupId }}
             </p>
+            <p style="margin: 5px; color: gray">
+              Location: {{ selectedTask.location }}
+            </p>
           </div>
           <div class="modal-footer">
             <button
