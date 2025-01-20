@@ -276,7 +276,7 @@ const loadData = async () => {
   try {
     const token = store.getToken;
 
-    const response = await fetch("/schedule", {
+    const response = await fetch("/api/schedule/schedule", {
       method: "GET", // Use the appropriate HTTP method
       headers: {
         "Content-Type": "application/json", // Specify JSON content type if required

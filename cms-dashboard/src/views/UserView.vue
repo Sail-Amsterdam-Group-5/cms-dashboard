@@ -139,7 +139,7 @@ const loadData = async () => {
     // Replace 'your_token' with the actual token value
     const token = store.getToken; // Retrieve the token from localStorage or your preferred storage method
 
-    const response = await fetch("/user/users", {
+    const response = await fetch("/api/user/users", {
       method: "GET", // Use the appropriate HTTP method
       headers: {
         "Content-Type": "application/json", // Specify JSON content type if required

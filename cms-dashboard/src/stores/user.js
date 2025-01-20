@@ -73,7 +73,7 @@ export const userStore = defineStore("store", {
 
         // Send the POST request using axios
         axios
-          .post("http://nginx-service-oscar-dev.apps.inholland.hcs-lab.nl/login", formData, {
+          .post("/api/login", formData, {
             headers: {
               "Content-Type": "application/x-www-form-urlencoded", // Specify content type
             },

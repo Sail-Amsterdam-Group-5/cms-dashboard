@@ -277,7 +277,7 @@ onMounted(() => {
 
 const loadUtilities = async () => {
   try {
-    const response = await fetch("/utilities");
+    const response = await fetch("/api/map/utilities");
     utilities.value = await response.json();
     console.log("Utilities:", utilities.value);
   } catch (error) {
