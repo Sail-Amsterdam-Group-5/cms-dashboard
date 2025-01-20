@@ -10,7 +10,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://nginx-service-oscar-dev.apps.inholland.hcs-lab.nl/",
+        target: "http://nginx-service-oscar-dev.apps.inholland.hcs-lab.nl",
         changeOrigin: true,
         secure: true,
       }
