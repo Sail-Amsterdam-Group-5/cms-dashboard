@@ -73,7 +73,7 @@ export const userStore = defineStore("store", {
 
         // Send the POST request using axios
         axios
-          .post("/api/login", formData, {
+          .post("/login", formData, {
             headers: {
               "Content-Type": "application/x-www-form-urlencoded", // Specify content type
             },

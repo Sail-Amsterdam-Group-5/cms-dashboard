@@ -13,6 +13,11 @@ export default defineConfig({
         target: "http://nginx-service-oscar-dev.apps.inholland.hcs-lab.nl",
         changeOrigin: true,
         secure: true,
+      },
+      "/": {
+        target: "http://nginx-service-oscar-dev.apps.inholland.hcs-lab.nl",
+        changeOrigin: true,
+        secure: true,
       }
     },
   },
