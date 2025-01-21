@@ -254,7 +254,7 @@ onMounted(() => {
 
   loadData();
 });
-// Run this function to load data from the server dw
+// Run this function to load data from the server dwdw
 const loadData = async () => {
   try {
     // Replace 'your_token' with the actual token value
