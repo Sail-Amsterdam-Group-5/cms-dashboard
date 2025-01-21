@@ -38,31 +38,3 @@ jobs:
           cd cms-dashboard
           npm install
           npm install eslint stylelint # Install linting tools
-          
-  deploy:
-    needs: [linting]
-    runs-on: ubuntu-latest
-
-    steps:
-      # Step 1: Check out the code
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      # Step 2: Build and Push Docker Image
-      - name: Build and push Docker image
-        run: |
-          cd cms-dashboard
-          docker build -t 690828/sail-cms-dashboard:${{ github.sha }} .
-          echo "${{ secrets.DOCKER_TOKEN }}" | docker login --username ${{ secrets.DOCKER_ID }} --password-stdin
-          docker push 690828/sail-cms-dashboard:${{ github.sha }}
-
-      # Step 3: Update Deployment.yml
-      - name: Update deployment.yml
-        run: |
-          cd openshift
-          sed -i "s|image: 690828/sail-cms-dashboard:.*|image: 690828/sail-cms-dashboard:${{ github.sha }}|" deployment.yml
-          git config --global user.name 'GitHub Actions'
-          git config --global user.email 'actions@github.com'
-          git add deployment.yml
-          git commit -m "Update deployment.yml"
-          git push
