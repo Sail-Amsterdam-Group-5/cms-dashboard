@@ -22,10 +22,10 @@ spec:
             - containerPort: 8080 # Nginx or Vue app usually serves on port 80
           resources:
             limits:
-              cpu: "0.2" # CPU limit (adjust as needed)
+              cpu: "0.1" # CPU limit (adjust as needed)
               memory: "300Mi" # Memory limit (adjust as needed)
             requests:
-              cpu: "0.1" # CPU request (adjust as needed)
+              cpu: "0.05" # CPU request (adjust as needed)
               memory: "100Mi" # Memory request (adjust as needed)
       imagePullSecrets:
         - name: cms-regcred # Use this if your Docker image is private
