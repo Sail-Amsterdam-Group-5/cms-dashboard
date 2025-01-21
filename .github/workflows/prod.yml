@@ -3,20 +3,13 @@ name: Vue.js CI/CD Pipeline
 on:
   push:
     branches:
-      - 'features/**'
+      - main
     paths:
       - 'cms-dashboard/**/*.js' # Target the js files inside cms-dashboard folder
       - 'cms-dashboard/**/*.vue' # Target vue files inside cms-dashboard folder
       - 'cms-dashboard/package.json' # Target package.json inside cms-dashboard folder
       - 'cms-dashboard/package-lock.json' # Target package-lock.json inside cms-dashboard folder
       - 'deployment.yml' # This can be at the root, no change here
-  pull_request:
-    branches:
-      - 'features/**'
-    types:
-      - opened
-      - reopened
-      - synchronize
 
 jobs:
   linting:
