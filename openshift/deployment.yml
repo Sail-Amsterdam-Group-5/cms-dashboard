@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: vue-app
-          image: 690828/sail-cms-dashboard:f47c7f0c12c91406a14d061bd3909ac6d30cb3a7
+          image: 690828/sail-cms-dashboard:10303f23b5c0b90c8b4451925eec575327c61061
           ports:
             - containerPort: 8080 # Nginx or Vue app usually serves on port 80
           resources:
